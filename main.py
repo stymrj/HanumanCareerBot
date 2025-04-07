@@ -103,7 +103,20 @@ def send_tip(message):
         "💼 *Career Tip:*\nNaukri dhoondhna ek tapasya hai.\nRoz thoda sudhar, thoda research aur full faith rakho Hanuman ji par! 💪",
         parse_mode='Markdown'
     )
-    
+
+# Replace this with your Telegram ID
+ADMIN_ID = 5341298807  # @SatyamGuptaaa ka ID
+
+@bot.message_handler(func=lambda message: True, content_types=['text'])
+def forward_non_command(message):
+    # Agar user koi command nahi bhej raha
+    if not message.text.startswith('/'):
+        # Forward message to admin
+        bot.forward_message(chat_id=ADMIN_ID, from_chat_id=message.chat.id, message_id=message.message_id)
+        # Acknowledge to user
+        bot.reply_to(message, "📩 Aapka message admin tak pahucha diya gaya hai. Jaldi reply milega. Jai Shree Ram! 🙏")
+
+
 def send_daily_reminder(msg):
     print(f"Sending message: {msg}")  # Debug message to track execution
     for uid in user_ids:
