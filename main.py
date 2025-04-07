@@ -104,28 +104,33 @@ def send_tip(message):
         parse_mode='Markdown'
     )
 
-# At top of file
-forwarded_messages = {}  # message_id: user_id
+# At top
+forwarded_messages = {}  # admin_msg_id: user_id
+ADMIN_ID = 5341298807
 
-ADMIN_ID = 5341298807  # Replace with your actual Telegram ID
-
-# Step 1: Forward and store user info
+# Step 1: Forward-style manual message + store mapping
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def forward_non_command(message):
     if not message.text.startswith('/'):
-        forwarded = bot.forward_message(chat_id=ADMIN_ID, from_chat_id=message.chat.id, message_id=message.message_id)
-        forwarded_messages[forwarded.message_id] = message.chat.id
+        msg = f"📨 *Message from @{message.from_user.username or 'user'}* (ID: `{message.chat.id}`):\n\n{message.text}"
+        sent = bot.send_message(ADMIN_ID, msg, parse_mode='Markdown')
+        forwarded_messages[sent.message_id] = message.chat.id
         bot.reply_to(message, "📩 Aapka message admin tak pahucha diya gaya hai. Jaldi reply milega. Jai Shree Ram! 🙏")
 
-# Step 2: When admin replies
-@bot.message_handler(func=lambda message: message.reply_to_message is not None and message.chat.id == ADMIN_ID)
+# Step 2: Admin reply logic
+@bot.message_handler(func=lambda message: message.reply_to_message and message.chat.id == ADMIN_ID)
 def handle_admin_reply(message):
-    reply_to_id = message.reply_to_message.message_id
-    if reply_to_id in forwarded_messages:
-        user_id = forwarded_messages[reply_to_id]
-        bot.send_message(chat_id=user_id, text=f"📬 *Admin ka reply:*\n{message.text}", parse_mode='Markdown')
-    else:
-        bot.reply_to(message, "❌ User not found for this reply.")
+    try:
+        reply_id = message.reply_to_message.message_id
+        user_id = forwarded_messages.get(reply_id)
+
+        if user_id:
+            bot.send_message(chat_id=user_id, text=f"📬 *Admin ka reply:*\n{message.text}", parse_mode='Markdown')
+        else:
+            bot.reply_to(message, "⚠️ Unable to find the original user for this reply.")
+    except Exception as e:
+        bot.send_message(ADMIN_ID, f"❌ Error: {e}")
+
 
 def send_daily_reminder(msg):
     print(f"Sending message: {msg}")  # Debug message to track execution
