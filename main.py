@@ -8,6 +8,10 @@ import os
 import json
 import random
 
+# At top
+forwarded_messages = {}  # admin_msg_id: user_id
+ADMIN_ID = 5341298807
+
 # Set environment variables
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
@@ -104,9 +108,7 @@ def send_tip(message):
         parse_mode='Markdown'
     )
 
-# At top
-forwarded_messages = {}  # admin_msg_id: user_id
-ADMIN_ID = 5341298807
+
 
 # Step 1: Forward-style manual message + store mapping
 @bot.message_handler(func=lambda message: True, content_types=['text'])
