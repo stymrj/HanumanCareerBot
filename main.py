@@ -23,10 +23,14 @@ USER_FILE = "users.json"
 
 # Load users from file
 def load_users():
-    try:
+    # Check if the file exists, if not create it
+    if os.path.exists(USER_FILE):
         with open(USER_FILE, "r") as f:
             return set(json.load(f))
-    except:
+    else:
+        # If the file doesn't exist, create it with an empty list
+        with open(USER_FILE, "w") as f:
+            json.dump([], f)  # Create an empty list
         return set()
 
 # Save users to file
@@ -48,6 +52,7 @@ def webhook():
 def send_welcome(message):
     user_ids.add(message.chat.id)
     save_users()
+    print(f"User added: {message.chat.id}")  # Log when a user is added
     welcome_msg = (
         "🚩 *Jai Shree Ram!* 🙏\n"
         "Aapka *HanumanCareerBot* mein hardik swagat hai! 🔥\n\n"
@@ -79,6 +84,7 @@ def send_tip(message):
     bot.reply_to(message, "💼 *Career Tip:*\nNaukri dhoondhna ek tapasya hai.\nRoz thoda sudhar, thoda research aur full faith rakho Hanuman ji par! 💪", parse_mode='Markdown')
 
 def send_daily_reminder(msg):
+    print(f"Sending message: {msg}")  # Debug message to track execution
     for uid in user_ids:
         try:
             bot.send_message(chat_id=uid, text=msg, parse_mode='Markdown')
@@ -87,20 +93,20 @@ def send_daily_reminder(msg):
 
 scheduler = BackgroundScheduler(timezone=IST)
 
-# Daily schedule for messages
+# Daily schedule for messages (starting from 15:33)
 daily_schedule = [
-    ("05:00", "🌞 *Jaag Jaiye!* Ram naam le kar naya din shuru kijiye! Jai Shree Ram 🙏"),
-    ("05:05", "🪥 *Brush kiya kya?* Subah ki tayyari shuddh mann se shuru hoti hai."),
-    ("05:30", "🧹 *Pooja Sthal Saaf Kiya?* Mandir ya ghar ka ek hissa Hanuman ji ke liye tayyar kijiye."),
-    ("05:40", "🚿 *Naha liye kya?* Sharir shuddh, mann pavitra - pooja ke liye ready ho jaiye."),
-    ("05:55", "✅ *Sab kuch ready hai?* Diya, kapoor, mala, chalisa sab rakh liya?"),
-    ("15:27", "🛕 *Ab shuru ho pooja!* Hanuman ji ko smaran karke prarthna kijiye. Commands: /chalisa /mantra /bajrangbaan"),
-    ("15:28", "🌸 *Pooja ho gayi?* To lo ek achha vichar:\n_“Sankat mochan naam tiharo, sumirat hoye anand.”_"),
-    ("15:26", "📈 *Career Tip Time:*\nAaj resume bhejna, interview prep karna aur ek naya skill seekhna target rakho!"),
-    ("12:00", "🕛 *Madhyahn Vichaar:*\n_“Bhoot pishach nikat nahi aave, Mahavir jab naam sunave.”_"),
-    ("16:00", "🧠 *Dopahar ke Baad:* Hanuman ji se seekho: lagataar mehnat aur bhakti se sab mumkin hai!"),
-    ("18:30", "🪔 *Shaam ki Aarti Reminder!*\nDeepak jalao, Hanuman ji ki Aarti karo! Use command: /aarti"),
-    ("21:00", "🌙 *Raat ka Sandesh:*\nAaj ka din Hanuman ji ko samarpit karke sona.\n_“Ram kaaj karibe ko aatur.”_\nShubh Ratri 🙏")
+    ("15:33", "🌞 *Jaag Jaiye!* Ram naam le kar naya din shuru kijiye! Jai Shree Ram 🙏"),
+    ("15:34", "🪥 *Brush kiya kya?* Subah ki tayyari shuddh mann se shuru hoti hai."),
+    ("15:35", "🧹 *Pooja Sthal Saaf Kiya?* Mandir ya ghar ka ek hissa Hanuman ji ke liye tayyar kijiye."),
+    ("15:36", "🚿 *Naha liye kya?* Sharir shuddh, mann pavitra - pooja ke liye ready ho jaiye."),
+    ("15:37", "✅ *Sab kuch ready hai?* Diya, kapoor, mala, chalisa sab rakh liya?"),
+    ("15:38", "🛕 *Ab shuru ho pooja!* Hanuman ji ko smaran karke prarthna kijiye. Commands: /chalisa /mantra /bajrangbaan"),
+    ("15:39", "🌸 *Pooja ho gayi?* To lo ek achha vichar:\n_“Sankat mochan naam tiharo, sumirat hoye anand.”_"),
+    ("15:40", "📈 *Career Tip Time:*\nAaj resume bhejna, interview prep karna aur ek naya skill seekhna target rakho!"),
+    ("15:41", "🕛 *Madhyahn Vichaar:*\n_“Bhoot pishach nikat nahi aave, Mahavir jab naam sunave.”_"),
+    ("15:42", "🧠 *Dopahar ke Baad:* Hanuman ji se seekho: lagataar mehnat aur bhakti se sab mumkin hai!"),
+    ("15:43", "🪔 *Shaam ki Aarti Reminder!*\nDeepak jalao, Hanuman ji ki Aarti karo! Use command: /aarti"),
+    ("15:44", "🌙 *Raat ka Sandesh:*\nAaj ka din Hanuman ji ko samarpit karke sona.\n_“Ram kaaj karibe ko aatur.”_\nShubh Ratri 🙏")
 ]
 
 # Add scheduled jobs
