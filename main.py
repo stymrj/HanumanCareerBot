@@ -71,10 +71,15 @@ def send_chalisa(message):
         parse_mode='Markdown'
     )
     
+
 @bot.message_handler(commands=['mantra'])
 def send_mantra(message):
-    bot.reply_to(message, "🔱 *Hanuman Mantra:*\n_ॐ हनुमते नमः_ 🙏\n\nRepeat with faith, feel the divine energy!", parse_mode='Markdown')
-
+    bot.reply_to(
+        message,
+        "🔱 *Hanuman Mantra:*\n_ॐ हनुमते नमः_ 🙏\n\nRepeat with faith, feel the divine energy!",
+        parse_mode='Markdown'
+    )
+    
 @bot.message_handler(commands=['bajrangbaan'])
 def send_bajrangbaan(message):
     bot.reply_to(
@@ -85,12 +90,20 @@ def send_bajrangbaan(message):
 
 @bot.message_handler(commands=['aarti'])
 def send_aarti(message):
-    bot.reply_to(message, "🪔 *Hanuman Aarti*\nhttps://bhrmfjblog.wordpress.com/wp-content/uploads/2016/06/shree-hanuman-aarti.pdf", parse_mode='Markdown')
-
+    bot.reply_to(
+        message,
+        "🪔 *Hanuman Aarti:*\n[Click here to read](https://bhrmfjblog.wordpress.com/wp-content/uploads/2016/06/shree-hanuman-aarti.pdf)",
+        parse_mode='Markdown'
+    )
+    
 @bot.message_handler(commands=['tip'])
 def send_tip(message):
-    bot.reply_to(message, "💼 *Career Tip:*\nNaukri dhoondhna ek tapasya hai.\nRoz thoda sudhar, thoda research aur full faith rakho Hanuman ji par! 💪", parse_mode='Markdown')
-
+    bot.reply_to(
+        message,
+        "💼 *Career Tip:*\nNaukri dhoondhna ek tapasya hai.\nRoz thoda sudhar, thoda research aur full faith rakho Hanuman ji par! 💪",
+        parse_mode='Markdown'
+    )
+    
 def send_daily_reminder(msg):
     print(f"Sending message: {msg}")  # Debug message to track execution
     for uid in user_ids:
