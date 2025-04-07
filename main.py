@@ -59,14 +59,13 @@ def send_welcome(message):
         "Aapka *HanumanBhakti* mein hardik swagat hai! 🔥\n\n"
         "Yeh bot aapko har roz subah se raat tak yaad dilayega:\n"
         "🕉️ Pooja, 🙏 Bhakti, 🔥 Career Motivation, aur 💡 Life Guidance!\n\n"
-        "Commands try karo:\n"
-        "/chalisa   /mantra   /bajrangbaan   /aarti   /tip"
+        "Commands try karo: from Menu"
     )
     bot.reply_to(message, welcome_msg, parse_mode='Markdown')
 
 @bot.message_handler(commands=['chalisa'])
 def send_chalisa(message):
-    bot.reply_to(message, "📖 *Hanuman Chalisa:*\n https://www.hindutemplealbany.org/wp-content/uploads/2016/08/Sri_Hanuman_Chalisa_Hindi.pdf", parse_mode='Markdown')
+    bot.reply_to(message, "📖 *Hanuman Chalisa:*\nhttps://www.hindutemplealbany.org/wp-content/uploads/2016/08/Sri_Hanuman_Chalisa_Hindi.pdf", parse_mode='Markdown')
 
 @bot.message_handler(commands=['mantra'])
 def send_mantra(message):
