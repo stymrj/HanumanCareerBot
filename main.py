@@ -6,6 +6,7 @@ from pytz import timezone
 from flask import Flask, request
 import os
 import json
+import random
 
 # Set environment variables
 BOT_TOKEN = os.getenv("BOT_TOKEN")
@@ -54,8 +55,8 @@ def send_welcome(message):
     save_users()
     print(f"User added: {message.chat.id}")  # Log when a user is added
     welcome_msg = (
-        "🚩 *Jai Shree Ram!* 🙏\n"
-        "Aapka *HanumanCareerBot* mein hardik swagat hai! 🔥\n\n"
+        "🚩 *Jai Shree Ram!* 🙏\n\n"
+        "Aapka *HanumanBhakti* mein hardik swagat hai! 🔥\n\n"
         "Yeh bot aapko har roz subah se raat tak yaad dilayega:\n"
         "🕉️ Pooja, 🙏 Bhakti, 🔥 Career Motivation, aur 💡 Life Guidance!\n\n"
         "Commands try karo:\n"
@@ -65,19 +66,19 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['chalisa'])
 def send_chalisa(message):
-    bot.reply_to(message, "📖 *Hanuman Chalisa*\nhttps://www.hanuman.com/chalisa", parse_mode='Markdown')
+    bot.reply_to(message, "📖 *Hanuman Chalisa*\nhttps://www.hindutemplealbany.org/wp-content/uploads/2016/08/Sri_Hanuman_Chalisa_Hindi.pdf", parse_mode='Markdown')
 
 @bot.message_handler(commands=['mantra'])
 def send_mantra(message):
-    bot.reply_to(message, "🔱 *Hanuman Mantra:*\n_ॐ हनुमते नमः_ 🙏\nRepeat with faith, feel the divine energy!", parse_mode='Markdown')
+    bot.reply_to(message, "🔱 *Hanuman Mantra:*\n_ॐ हनुमते नमः_ 🙏\n\nRepeat with faith, feel the divine energy!", parse_mode='Markdown')
 
 @bot.message_handler(commands=['bajrangbaan'])
 def send_bajrangbaan(message):
-    bot.reply_to(message, "🕉️ *Bajrang Baan*\nhttps://www.hanuman.com/bajrangbaan", parse_mode='Markdown')
+    bot.reply_to(message, "🕉️ *Bajrang Baan*\nhttps://sanskritdocuments.org/doc_z_otherlang_hindi/bajarangabaaNHindi.pdf", parse_mode='Markdown')
 
 @bot.message_handler(commands=['aarti'])
 def send_aarti(message):
-    bot.reply_to(message, "🪔 *Hanuman Aarti*\nhttps://www.hanuman.com/aarti", parse_mode='Markdown')
+    bot.reply_to(message, "🪔 *Hanuman Aarti*\nhttps://bhrmfjblog.wordpress.com/wp-content/uploads/2016/06/shree-hanuman-aarti.pdf", parse_mode='Markdown')
 
 @bot.message_handler(commands=['tip'])
 def send_tip(message):
@@ -93,32 +94,80 @@ def send_daily_reminder(msg):
 
 scheduler = BackgroundScheduler(timezone=IST)
 
-# Daily schedule for messages (starting from 15:33)
-daily_schedule = [
-    ("15:33", "🌞 *Jaag Jaiye!* Ram naam le kar naya din shuru kijiye! Jai Shree Ram 🙏"),
-    ("15:34", "🪥 *Brush kiya kya?* Subah ki tayyari shuddh mann se shuru hoti hai."),
-    ("15:35", "🧹 *Pooja Sthal Saaf Kiya?* Mandir ya ghar ka ek hissa Hanuman ji ke liye tayyar kijiye."),
-    ("15:36", "🚿 *Naha liye kya?* Sharir shuddh, mann pavitra - pooja ke liye ready ho jaiye."),
-    ("15:37", "✅ *Sab kuch ready hai?* Diya, kapoor, mala, chalisa sab rakh liya?"),
-    ("15:38", "🛕 *Ab shuru ho pooja!* Hanuman ji ko smaran karke prarthna kijiye. Commands: /chalisa /mantra /bajrangbaan"),
-    ("15:39", "🌸 *Pooja ho gayi?* To lo ek achha vichar:\n_“Sankat mochan naam tiharo, sumirat hoye anand.”_"),
-    ("15:40", "📈 *Career Tip Time:*\nAaj resume bhejna, interview prep karna aur ek naya skill seekhna target rakho!"),
-    ("15:41", "🕛 *Madhyahn Vichaar:*\n_“Bhoot pishach nikat nahi aave, Mahavir jab naam sunave.”_"),
-    ("15:42", "🧠 *Dopahar ke Baad:* Hanuman ji se seekho: lagataar mehnat aur bhakti se sab mumkin hai!"),
-    ("15:43", "🪔 *Shaam ki Aarti Reminder!*\nDeepak jalao, Hanuman ji ki Aarti karo! Use command: /aarti"),
-    ("15:44", "🌙 *Raat ka Sandesh:*\nAaj ka din Hanuman ji ko samarpit karke sona.\n_“Ram kaaj karibe ko aatur.”_\nShubh Ratri 🙏")
-]
+# Daily schedule for messages with multiple random messages for each time slot
+daily_schedule = {
+    "05:30": [
+        "🌞 *Jaag Jaiye!* Ram naam le kar naya din shuru kijiye! Jai Shree Ram 🙏",
+        "🙏 *Subah ka samay hai!* Hanuman ji ko yaad karte hue apna din shuru kijiye.",
+        "🌅 *Naya din hai, nayi umeedein!* Jai Shree Ram! 🙏",
+    ],
+    "05:35": [
+        "🪥 *Brush kiya kya?* Subah ki tayyari shuddh mann se shuru hoti hai.",
+        "🪥 *Subah ki safai!* Dhoop me apna chehra chamkayein, aur apne man ko pavitra karein.",
+        "🌿 *Swachh rahe apna mann,* safai se shuru hota hai Har kaam! 🪥",
+    ],
+    "05:45": [
+        "🧹 *Pooja Sthal Saaf Kiya?* Mandir ya ghar ka ek hissa Hanuman ji ke liye tayyar kijiye.",
+        "🧹 *Pooja ki jagah safai ka waqt hai!* Pooja sthal ka safai bhi ek prakar ki bhakti hai.",
+        "🕯️ *Sthal ko pavitra rakhein,* apni pooja ke liye ek pavitra jagah tayar karein.",
+    ],
+    "05:56": [
+        "🚿 *Naha liye kya?* Sharir shuddh, mann pavitra - pooja ke liye ready ho jaiye.",
+        "🚿 *Naha lo aur tayar ho jao!* Sharir ko shuddh karna pooja ka pehla kadam hai.",
+        "💦 *Naha kar apne aapko shuddh karna hai,* taaki mann aur sharir dono pavitra ho sakein.",
+    ],
+    "06:00": [
+        "✅ *Sab kuch ready hai?* Diya, kapoor, mala, chalisa sab rakh liya?",
+        "✅ *Sab kuch check kiya?* Diya, kapoor, aur mala ko tayar rakhna zaroori hai.",
+        "🪔 *Sab kuch perfect hona chahiye!* Diya jala ke apne man ko pavitra banaayein.",
+    ],
+    "06:20": [
+        "🛕 *Ab shuru ho pooja!* Hanuman ji ko smaran karke prarthna kijiye. Commands: /chalisa /mantra /bajrangbaan",
+        "🙏 *Pooja shuru ho gayi?* Hanuman ji ki aarti aur chalisa se din ki shuruaat kijiye.",
+        "🕯️ *Pooja ka samay hai!* Hanuman ji ki pooja karna apne jeevan ko safal banaata hai.",
+    ],
+    "07:30": [
+        "🌸 *Pooja ho gayi?* To lo ek achha vichar:\n_“Sankat mochan naam tiharo, sumirat hoye anand.”_",
+        "🌸 *Hanuman Ji ki kirpa se sab kuch safal ho!* Aapka din mangalmay ho.",
+        "🕉️ *Jab tak man mein bhakti aur shraddha rahe,* sankat kabhi paas nahi aata.",
+    ],
+    "09:40": [
+        "📈 *Career Tip Time:*\nAaj resume bhejna, interview prep karna aur ek naya skill seekhna target rakho!",
+        "📊 *Naye goals set karo,* apne career ko agle level par le jao!",
+        "💼 *Job search chal rahi hai?* Apne aapko har din thoda aur behtar banao. Hanuman ji ki kripa hamesha aapke saath hai.",
+    ],
+    "13:10": [
+        "🕛 *Madhyahn Vichaar:*\n_“Bhoot pishach nikat nahi aave, Mahavir jab naam sunave.”_",
+        "🌸 *Madhyahn mein, apne kaam ko safalta ki or badhao.* Hanuman ji ki kripa aap par sada rahe.",
+        "🌞 *Jab tak aapka man safal hone ki ichha rakhta hai,* har kathinai aapke rasta se hatt jayegi.",
+    ],
+    "15:42": [
+        "🧠 *Dopahar ke Baad:* Hanuman ji se seekho: lagataar mehnat aur bhakti se sab mumkin hai!",
+        "💪 *Mehnat karna hai to Hanuman ji se seekho,* apni manzil tak pahuncho!",
+        "⏰ *Har pal ka upyog karo,* aur apni manzil ki or kadam badhao.",
+    ],
+    "18:30": [
+        "🪔 *Shaam ki Aarti Reminder!*\nDeepak jalao, Hanuman ji ki Aarti karo! Use command: /aarti",
+        "🕯️ *Aarti ki tyari ho gayi?* Aaj ki shaam, apne dil ko safai se bhar lo.",
+        "🌟 *Aarti ka waqt hai!* Deepak aur diyas ke saath apne ghar ko roshan karo.",
+    ],
+    "21:00": [
+        "🌙 *Raat ka Sandesh:*\nAaj ka din Hanuman ji ko samarpit karke sona.\n_“Ram kaaj karibe ko aatur.”_\nShubh Ratri 🙏",
+        "🌙 *Raat ki shanti* ke liye, apne dil mein Hanuman ji ka naam rakh kar neend aaye.",
+        "✨ *Suno Hanuman ji ki aarti,* aur apne sapne ko sach karne ke liye apne mann ko aaram de.",
+    ]
+}
 
-# Add scheduled jobs
-for time_str, message in daily_schedule:
+# Add scheduled jobs for each time with random messages
+for time_str, messages in daily_schedule.items():
     hour, minute = map(int, time_str.split(":"))
-    scheduler.add_job(send_daily_reminder, 'cron', hour=hour, minute=minute, args=[message])
+    scheduler.add_job(send_daily_reminder, 'cron', hour=hour, minute=minute, args=[random.choice(messages)])
 
 scheduler.start()
 
 @app.route('/', methods=['GET'])
 def index():
-    return "🚀 Jai Shree Ram! HanumanCareerBot is Live!"
+    return "🚀 Jai Shree Ram! HanumanBhakt is Live!"
 
 if __name__ == "__main__":
     import logging
