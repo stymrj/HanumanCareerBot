@@ -1,0 +1,4 @@
+flask
+pyTelegramBotAPI
+apscheduler
+pytz
