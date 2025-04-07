@@ -5,17 +5,41 @@ from datetime import datetime
 from pytz import timezone
 from flask import Flask, request
 import os
+import json
 
+# Set environment variables
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 IST = timezone("Asia/Kolkata")
+
+# Initialize the bot
 bot = telebot.TeleBot(BOT_TOKEN)
 
+# Create Flask app
 app = Flask(__name__)
-user_ids = set()
+
+# Path to store user data
+USER_FILE = "users.json"
+
+# Load users from file
+def load_users():
+    try:
+        with open(USER_FILE, "r") as f:
+            return set(json.load(f))
+    except:
+        return set()
+
+# Save users to file
+def save_users():
+    with open(USER_FILE, "w") as f:
+        json.dump(list(user_ids), f)
+
+# Initialize user_ids from the file
+user_ids = load_users()
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
+    print("📩 Webhook received!")  # Debug message
     update = telebot.types.Update.de_json(request.stream.read().decode("utf-8"))
     bot.process_new_updates([update])
     return "", 200
@@ -23,6 +47,7 @@ def webhook():
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     user_ids.add(message.chat.id)
+    save_users()
     welcome_msg = (
         "🚩 *Jai Shree Ram!* 🙏\n"
         "Aapka *HanumanCareerBot* mein hardik swagat hai! 🔥\n\n"
@@ -62,6 +87,7 @@ def send_daily_reminder(msg):
 
 scheduler = BackgroundScheduler(timezone=IST)
 
+# Daily schedule for messages
 daily_schedule = [
     ("05:00", "🌞 *Jaag Jaiye!* Ram naam le kar naya din shuru kijiye! Jai Shree Ram 🙏"),
     ("05:05", "🪥 *Brush kiya kya?* Subah ki tayyari shuddh mann se shuru hoti hai."),
@@ -77,6 +103,7 @@ daily_schedule = [
     ("21:00", "🌙 *Raat ka Sandesh:*\nAaj ka din Hanuman ji ko samarpit karke sona.\n_“Ram kaaj karibe ko aatur.”_\nShubh Ratri 🙏")
 ]
 
+# Add scheduled jobs
 for time_str, message in daily_schedule:
     hour, minute = map(int, time_str.split(":"))
     scheduler.add_job(send_daily_reminder, 'cron', hour=hour, minute=minute, args=[message])
